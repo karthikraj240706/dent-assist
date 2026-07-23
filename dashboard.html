@@ -7,18 +7,74 @@
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/responsive.css">
   <style>
-    .dash-grid {
+    .dashboard-header {
+      padding: 40px 0 20px;
+    }
+
+    .analytics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+
+    .dashboard-layout {
       display: grid;
       grid-template-columns: 2fr 1fr;
-      gap: 24px;
-      margin-top: 32px;
+      gap: 32px;
+      margin-bottom: 60px;
     }
-    .panel {
+
+    .dash-card {
       background: var(--bg-surface);
       border: 1px solid var(--border-color);
       border-radius: var(--radius-md);
-      padding: 24px;
-      margin-bottom: 24px;
+      padding: 28px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .progress-bar-bg {
+      width: 100%;
+      height: 10px;
+      background: var(--bg-primary);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+      margin-top: 8px;
+      border: 1px solid var(--border-color);
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--text-primary);
+      width: 0%;
+      transition: width 0.5s ease;
+    }
+
+    .history-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      margin-top: 16px;
+    }
+
+    .history-table th, 
+    .history-table td {
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .history-table th {
+      background: var(--bg-primary);
+      color: var(--text-secondary);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 992px) {
+      .dashboard-layout {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -30,6 +86,7 @@
         <div class="logo-icon">D</div>
         <span>DentAssist</span>
       </a>
+      
       <ul class="nav-links" id="navLinks">
         <li><a href="index.html">Home</a></li>
         <li><a href="library.html">Instruments</a></li>
@@ -37,37 +94,121 @@
         <li><a href="quiz.html">Quiz Center</a></li>
         <li><a href="dashboard.html" class="active">Dashboard</a></li>
       </ul>
+
       <div class="nav-actions">
-        <button class="theme-btn" id="themeToggle">🌙</button>
+        <button class="theme-btn" id="themeToggle" aria-label="Toggle Theme">🌙</button>
+        <div class="hamburger" id="hamburger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
       </div>
     </div>
   </nav>
 
-  <main class="container" style="padding-top: 40px; padding-bottom: 60px;">
-    <h1>Student Learning Dashboard</h1>
-    <p style="color: var(--text-secondary);">Overview of your recorded clinical activities, quiz stats, and saved items.</p>
+  <main class="container">
+    <div class="dashboard-header">
+      <h1>Clinical Mastery & Analytics</h1>
+      <p style="color: var(--text-secondary); margin-top: 6px;">Track your clinical cases, instrument studies, and OSCE testing metrics in real time.</p>
+    </div>
 
-    <div class="dash-grid">
-      <div>
-        <div class="panel">
-          <h3>Saved Favorite Instruments</h3>
-          <p id="favCountText" style="color: var(--text-secondary); margin-top: 8px;">You have 0 saved items in your bookmarks.</p>
+    <!-- Analytics Top Grid -->
+    <div class="analytics-grid">
+      <div class="stat-card">
+        <div class="stat-number" id="dashTotalCases">0</div>
+        <div class="stat-label">Cases Managed</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="dashTotalRevenue">₹0</div>
+        <div class="stat-label">Simulated Billings</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="dashQuizAccuracy">0%</div>
+        <div class="stat-label">Average Quiz Score</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="dashQuizzesTaken">0</div>
+        <div class="stat-label">Quizzes Completed</div>
+      </div>
+    </div>
+
+    <div class="dashboard-layout">
+      <!-- Left Column: Quiz History Log -->
+      <div class="dash-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <h3 style="font-size: 1.15rem;">Recent Quiz Performance Log</h3>
+          <button class="btn btn-secondary" onclick="clearQuizHistory()" style="padding: 6px 12px; font-size: 0.8rem;">Clear History</button>
         </div>
-        <div class="panel">
-          <h3>Recent Clinic Logs</h3>
-          <p id="recentPatientsText" style="color: var(--text-secondary); margin-top: 8px;">No patients recorded yet.</p>
+
+        <div style="overflow-x: auto;">
+          <table class="history-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Category</th>
+                <th>Mode</th>
+                <th>Score</th>
+                <th>Accuracy</th>
+              </tr>
+            </thead>
+            <tbody id="quizHistoryBody">
+              <tr>
+                <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 24px;">No quiz attempts logged yet.</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
 
-      <div>
-        <div class="panel">
-          <h3>Quiz Performance</h3>
-          <div style="font-size: 2rem; font-weight: 700; margin-top: 8px;" id="dashQuizScore">0 pts</div>
-          <p style="color: var(--text-secondary); font-size: 0.85rem;">Based on your recent OSCE attempts.</p>
+      <!-- Right Column: Mastery Metrics & System Controls -->
+      <div style="display: flex; flex-direction: column; gap: 24px;">
+        
+        <!-- Clinical Progress Card -->
+        <div class="dash-card">
+          <h3 style="font-size: 1.15rem; margin-bottom: 16px;">Readiness Index</h3>
+          
+          <div style="margin-bottom: 18px;">
+            <div style="display: flex; justify-content: space-between; font-size: 0.88rem; font-weight: 600;">
+              <span>OSCE Readiness Score</span>
+              <span id="readinessPercent">0%</span>
+            </div>
+            <div class="progress-bar-bg">
+              <div class="progress-bar-fill" id="readinessBar"></div>
+            </div>
+          </div>
+
+          <div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.88rem; font-weight: 600;">
+              <span>Clinical Posting Log Target</span>
+              <span id="caseTargetPercent">0%</span>
+            </div>
+            <div class="progress-bar-bg">
+              <div class="progress-bar-fill" id="caseTargetBar"></div>
+            </div>
+          </div>
         </div>
+
+        <!-- System Controls Card -->
+        <div class="dash-card">
+          <h3 style="font-size: 1.15rem; margin-bottom: 12px;">Data Management</h3>
+          <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 20px;">Backup or reset your stored clinical simulator and quiz records.</p>
+          
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <button class="btn btn-secondary" onclick="exportData()" style="width: 100%;">📥 Export Progress Data (JSON)</button>
+            <button class="btn btn-secondary" onclick="resetAllData()" style="width: 100%; border-color: #c5221f; color: #c5221f;">⚠️ Reset All App Data</button>
+          </div>
+        </div>
+
       </div>
     </div>
   </main>
+
+  <footer>
+    <div class="container footer-bottom">
+      <p>&copy; 2026 DentAssist. Built for Dental Education.</p>
+      <p>Precision Clinical Guide</p>
+    </div>
+  </footer>
 
   <script src="js/script.js"></script>
   <script src="js/dashboard.js"></script>
