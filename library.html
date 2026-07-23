@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Instrument Library – DentAssist</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">D</div>
+        <span>DentAssist</span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="library.html" class="active">Instruments</a></li>
+        <li><a href="appointment.html">Clinic Simulator</a></li>
+        <li><a href="quiz.html">Quiz Center</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="theme-btn" id="themeToggle">🌙</button>
+        <div class="hamburger" id="hamburger">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container" style="padding-top: 40px; padding-bottom: 60px;">
+    <div style="margin-bottom: 32px;">
+      <h1>Dental Instrument Library</h1>
+      <p style="color: var(--text-secondary);">Filter and explore clinical instruments, clinical indications, and sterilization details.</p>
+    </div>
+
+    <div class="filter-bar">
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Search instruments by name or keyword...">
+      </div>
+      <select class="filter-select" id="deptFilter">
+        <option value="All">All Departments</option>
+        <option value="Diagnostic">Diagnostic</option>
+        <option value="Periodontics">Periodontics</option>
+        <option value="Conservative">Conservative/Endo</option>
+        <option value="Oral Surgery">Oral Surgery</option>
+        <option value="Prosthodontics">Prosthodontics</option>
+      </select>
+    </div>
+
+    <div class="cards-grid" id="instrumentsGrid"></div>
+  </main>
+
+  <footer>
+    <div class="container footer-bottom">
+      <p>&copy; 2026 DentAssist.</p>
+      <p>Precision Learning System</p>
+    </div>
+  </footer>
+
+  <script src="js/script.js"></script>
+  <script src="js/library.js"></script>
+</body>
+</html>
