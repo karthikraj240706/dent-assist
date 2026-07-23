@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clinic Simulator – DentAssist</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <style>
+    .sim-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-top: 32px;
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 500;
+      margin-bottom: 6px;
+      color: var(--text-secondary);
+    }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+      background: var(--bg-surface);
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      outline: none;
+    }
+    .patient-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--bg-surface);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+    }
+    .patient-table th, .patient-table td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+      font-size: 0.9rem;
+    }
+    .patient-table th {
+      background: var(--accent-light);
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">D</div>
+        <span>DentAssist</span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="library.html">Instruments</a></li>
+        <li><a href="appointment.html" class="active">Clinic Simulator</a></li>
+        <li><a href="quiz.html">Quiz Center</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="theme-btn" id="themeToggle">🌙</button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container" style="padding-top: 40px; padding-bottom: 60px;">
+    <h1>Clinical Appointment & Billing Simulator</h1>
+    <p style="color: var(--text-secondary);">Practice registering clinical patient intakes, setting treatment records, and computing charges.</p>
+
+    <div class="sim-layout">
+      <div style="background: var(--bg-surface); padding: 24px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+        <h3 style="margin-bottom: 20px;">Patient Registration</h3>
+        <form id="appointmentForm">
+          <div class="form-group">
+            <label>Patient Full Name</label>
+            <input type="text" id="patientName" required placeholder="e.g. Rahul Sharma">
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="form-group">
+              <label>Age</label>
+              <input type="number" id="patientAge" required placeholder="24">
+            </div>
+            <div class="form-group">
+              <label>Gender</label>
+              <select id="patientGender">
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Department</label>
+            <select id="clinicDept">
+              <option value="Oral Diagnosis">Oral Diagnosis</option>
+              <option value="Endodontics">Endodontics</option>
+              <option value="Periodontics">Periodontics</option>
+              <option value="Prosthodontics">Prosthodontics</option>
+              <option value="Oral Surgery">Oral Surgery</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Chief Complaint / Diagnosis</label>
+            <textarea id="chiefComplaint" rows="3" placeholder="e.g. Acute pain in lower right posterior region..."></textarea>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="form-group">
+              <label>Consultation Fee (₹)</label>
+              <input type="number" id="feeConsult" value="200">
+            </div>
+            <div class="form-group">
+              <label>Treatment Fee (₹)</label>
+              <input type="number" id="feeTreatment" value="1500">
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%;">Save Record</button>
+        </form>
+      </div>
+
+      <div>
+        <h3 style="margin-bottom: 20px;">Recorded Patient Entries</h3>
+        <div style="overflow-x: auto;">
+          <table class="patient-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Dept</th>
+                <th>Fee</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="patientTableBody">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/script.js"></script>
+  <script src="js/appointment.js"></script>
+</body>
+</html>
