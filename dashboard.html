@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard – DentAssist</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <style>
+    .dash-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 24px;
+      margin-top: 32px;
+    }
+    .panel {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">D</div>
+        <span>DentAssist</span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="library.html">Instruments</a></li>
+        <li><a href="appointment.html">Clinic Simulator</a></li>
+        <li><a href="quiz.html">Quiz Center</a></li>
+        <li><a href="dashboard.html" class="active">Dashboard</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="theme-btn" id="themeToggle">🌙</button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container" style="padding-top: 40px; padding-bottom: 60px;">
+    <h1>Student Learning Dashboard</h1>
+    <p style="color: var(--text-secondary);">Overview of your recorded clinical activities, quiz stats, and saved items.</p>
+
+    <div class="dash-grid">
+      <div>
+        <div class="panel">
+          <h3>Saved Favorite Instruments</h3>
+          <p id="favCountText" style="color: var(--text-secondary); margin-top: 8px;">You have 0 saved items in your bookmarks.</p>
+        </div>
+        <div class="panel">
+          <h3>Recent Clinic Logs</h3>
+          <p id="recentPatientsText" style="color: var(--text-secondary); margin-top: 8px;">No patients recorded yet.</p>
+        </div>
+      </div>
+
+      <div>
+        <div class="panel">
+          <h3>Quiz Performance</h3>
+          <div style="font-size: 2rem; font-weight: 700; margin-top: 8px;" id="dashQuizScore">0 pts</div>
+          <p style="color: var(--text-secondary); font-size: 0.85rem;">Based on your recent OSCE attempts.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/script.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>
