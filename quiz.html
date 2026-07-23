@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz Center – DentAssist</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <style>
+    .quiz-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 32px;
+      max-width: 680px;
+      margin: 40px auto;
+      box-shadow: var(--shadow-sm);
+    }
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 24px 0;
+    }
+    .option-item {
+      padding: 14px 18px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 0.95rem;
+    }
+    .option-item:hover {
+      background: var(--accent-light);
+      border-color: var(--border-hover);
+    }
+    .option-item.selected {
+      border-color: var(--text-primary);
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">D</div>
+        <span>DentAssist</span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="library.html">Instruments</a></li>
+        <li><a href="appointment.html">Clinic Simulator</a></li>
+        <li><a href="quiz.html" class="active">Quiz Center</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="theme-btn" id="themeToggle">🌙</button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <div class="quiz-card" id="quizContainer">
+      <div style="display: flex; justify-content: space-between; margin-bottom: 16px; color: var(--text-secondary); font-size: 0.85rem;">
+        <span id="quizProgress">Question 1 of 3</span>
+        <span>OSCE Mode</span>
+      </div>
+      <h3 id="quizQuestion">Loading question...</h3>
+      <div class="options-list" id="optionsContainer"></div>
+      <button class="btn btn-primary" id="nextBtn" style="width: 100%;">Submit & Next</button>
+    </div>
+  </main>
+
+  <script src="js/script.js"></script>
+  <script src="js/quiz.js"></script>
+</body>
+</html>
