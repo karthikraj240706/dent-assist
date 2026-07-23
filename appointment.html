@@ -7,49 +7,161 @@
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/responsive.css">
   <style>
+    .sim-header {
+      padding: 40px 0 20px;
+    }
+
     .sim-layout {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 32px;
-      margin-top: 32px;
+      margin-top: 24px;
+      margin-bottom: 60px;
     }
+
+    .form-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 28px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .form-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
     .form-group {
-      margin-bottom: 16px;
+      margin-bottom: 18px;
     }
+
     .form-group label {
       display: block;
-      font-size: 0.85rem;
-      font-weight: 500;
+      font-size: 0.82rem;
+      font-weight: 600;
       margin-bottom: 6px;
       color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
-    .form-group input, .form-group select, .form-group textarea {
+
+    .form-group input, 
+    .form-group select, 
+    .form-group textarea {
       width: 100%;
-      padding: 10px 14px;
+      padding: 11px 14px;
       border-radius: var(--radius-sm);
       border: 1px solid var(--border-color);
-      background: var(--bg-surface);
+      background: var(--bg-primary);
       color: var(--text-primary);
       font-family: var(--font-body);
+      font-size: 0.92rem;
       outline: none;
+      transition: var(--transition);
     }
+
+    .form-group input:focus, 
+    .form-group select:focus, 
+    .form-group textarea:focus {
+      border-color: var(--text-primary);
+      background: var(--bg-surface);
+    }
+
+    .patient-table-container {
+      background: var(--bg-surface);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+
     .patient-table {
       width: 100%;
       border-collapse: collapse;
-      background: var(--bg-surface);
-      border-radius: var(--radius-md);
-      overflow: hidden;
-      border: 1px solid var(--border-color);
-    }
-    .patient-table th, .patient-table td {
-      padding: 12px 16px;
-      text-align: left;
-      border-bottom: 1px solid var(--border-color);
       font-size: 0.9rem;
     }
+
+    .patient-table th, 
+    .patient-table td {
+      padding: 14px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+
     .patient-table th {
-      background: var(--accent-light);
+      background: var(--bg-primary);
       font-weight: 600;
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+    }
+
+    .patient-table tr:hover {
+      background: var(--accent-light);
+    }
+
+    /* Modal / Receipt Styles */
+    .receipt-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+
+    .receipt-modal.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .receipt-card {
+      background: #ffffff;
+      color: #202124;
+      border-radius: var(--radius-md);
+      width: 90%;
+      max-width: 520px;
+      padding: 32px;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+    }
+
+    .receipt-header {
+      text-align: center;
+      border-bottom: 2px dashed #e9ecef;
+      padding-bottom: 20px;
+      margin-bottom: 20px;
+    }
+
+    .receipt-line {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 0.9rem;
+    }
+
+    .receipt-total {
+      border-top: 2px dashed #e9ecef;
+      padding-top: 14px;
+      margin-top: 14px;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    @media (max-width: 992px) {
+      .sim-layout {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -61,6 +173,7 @@
         <div class="logo-icon">D</div>
         <span>DentAssist</span>
       </a>
+      
       <ul class="nav-links" id="navLinks">
         <li><a href="index.html">Home</a></li>
         <li><a href="library.html">Instruments</a></li>
@@ -68,86 +181,159 @@
         <li><a href="quiz.html">Quiz Center</a></li>
         <li><a href="dashboard.html">Dashboard</a></li>
       </ul>
+
       <div class="nav-actions">
-        <button class="theme-btn" id="themeToggle">🌙</button>
+        <button class="theme-btn" id="themeToggle" aria-label="Toggle Theme">🌙</button>
+        <div class="hamburger" id="hamburger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
       </div>
     </div>
   </nav>
 
-  <main class="container" style="padding-top: 40px; padding-bottom: 60px;">
-    <h1>Clinical Appointment & Billing Simulator</h1>
-    <p style="color: var(--text-secondary);">Practice registering clinical patient intakes, setting treatment records, and computing charges.</p>
+  <main class="container">
+    <div class="sim-header">
+      <h1>Clinical Intake & Billing Simulator</h1>
+      <p style="color: var(--text-secondary); margin-top: 6px;">Simulate patient intake, diagnostic logs, treatment billing, and official clinic receipts.</p>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="stats-grid" style="margin-bottom: 32px;">
+      <div class="stat-card">
+        <div class="stat-number" id="statTodayPatients">0</div>
+        <div class="stat-label">Registered Patients</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="statTodayRevenue">₹0</div>
+        <div class="stat-label">Total Clinical Revenue</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="statActiveDept">-</div>
+        <div class="stat-label">Top Department</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">18%</div>
+        <div class="stat-label">Standard GST Rate</div>
+      </div>
+    </div>
 
     <div class="sim-layout">
-      <div style="background: var(--bg-surface); padding: 24px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
-        <h3 style="margin-bottom: 20px;">Patient Registration</h3>
+      <!-- Left: Registration Form -->
+      <div class="form-card">
+        <h3 style="margin-bottom: 20px; font-size: 1.2rem;">New Patient Case Entry</h3>
+        
         <form id="appointmentForm">
           <div class="form-group">
             <label>Patient Full Name</label>
-            <input type="text" id="patientName" required placeholder="e.g. Rahul Sharma">
+            <input type="text" id="patientName" required placeholder="e.g. Ananya Sharma">
           </div>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+
+          <div class="form-grid-2">
             <div class="form-group">
               <label>Age</label>
-              <input type="number" id="patientAge" required placeholder="24">
+              <input type="number" id="patientAge" min="1" max="100" required placeholder="22">
             </div>
             <div class="form-group">
               <label>Gender</label>
               <select id="patientGender">
-                <option value="Male">Male</option>
                 <option value="Female">Female</option>
+                <option value="Male">Male</option>
                 <option value="Other">Other</option>
               </select>
             </div>
           </div>
-          <div class="form-group">
-            <label>Department</label>
-            <select id="clinicDept">
-              <option value="Oral Diagnosis">Oral Diagnosis</option>
-              <option value="Endodontics">Endodontics</option>
-              <option value="Periodontics">Periodontics</option>
-              <option value="Prosthodontics">Prosthodontics</option>
-              <option value="Oral Surgery">Oral Surgery</option>
-            </select>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label>Clinical Department</label>
+              <select id="clinicDept">
+                <option value="Oral Diagnosis">Oral Diagnosis & Medicine</option>
+                <option value="Conservative & Endo">Conservative & Endodontics</option>
+                <option value="Periodontics">Periodontics</option>
+                <option value="Prosthodontics">Prosthodontics</option>
+                <option value="Oral Surgery">Oral & Maxillofacial Surgery</option>
+                <option value="Pedodontics">Pedodontics</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Attending Student / Doctor</label>
+              <input type="text" id="doctorName" required placeholder="e.g. Dr. A. Verma (BDS)">
+            </div>
           </div>
+
           <div class="form-group">
-            <label>Chief Complaint / Diagnosis</label>
-            <textarea id="chiefComplaint" rows="3" placeholder="e.g. Acute pain in lower right posterior region..."></textarea>
+            <label>Chief Complaint & Diagnosis</label>
+            <textarea id="chiefComplaint" rows="3" required placeholder="e.g. Severe throbbing pain in lower left molar region upon thermal stimuli for 3 days..."></textarea>
           </div>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+
+          <div class="form-grid-2">
             <div class="form-group">
               <label>Consultation Fee (₹)</label>
-              <input type="number" id="feeConsult" value="200">
+              <input type="number" id="feeConsult" value="200" required>
             </div>
             <div class="form-group">
               <label>Treatment Fee (₹)</label>
-              <input type="number" id="feeTreatment" value="1500">
+              <input type="number" id="feeTreatment" value="1500" placeholder="e.g. 1500" required>
             </div>
           </div>
-          <button type="submit" class="btn btn-primary" style="width: 100%;">Save Record</button>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Register & Generate Bill</button>
         </form>
       </div>
 
+      <!-- Right: Registered Patient Log -->
       <div>
-        <h3 style="margin-bottom: 20px;">Recorded Patient Entries</h3>
-        <div style="overflow-x: auto;">
-          <table class="patient-table">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Dept</th>
-                <th>Fee</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody id="patientTableBody">
-            </tbody>
-          </table>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <h3 style="font-size: 1.2rem;">Today's Case Register</h3>
+          <button class="btn btn-secondary" onclick="clearAllPatients()" style="padding: 6px 12px; font-size: 0.8rem;">Clear All Logs</button>
+        </div>
+
+        <div class="patient-table-container">
+          <div style="overflow-x: auto;">
+            <table class="patient-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Patient Details</th>
+                  <th>Department</th>
+                  <th>Total Bill</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="patientTableBody"></tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
   </main>
+
+  <!-- Printable Receipt Modal -->
+  <div class="receipt-modal" id="receiptModal">
+    <div class="receipt-card">
+      <div class="receipt-header">
+        <h2 style="font-size: 1.4rem; font-weight: 700;">DENTASSIST CLINICAL CENTRE</h2>
+        <p style="font-size: 0.8rem; color: #5f6368; margin-top: 4px;">Dental Teaching Hospital & BDS Training Clinic</p>
+        <p style="font-size: 0.75rem; color: #80868b; margin-top: 2px;" id="receiptDate"></p>
+      </div>
+
+      <div id="receiptDetails"></div>
+
+      <div style="display: flex; gap: 12px; margin-top: 24px;">
+        <button class="btn btn-primary" onclick="window.print()" style="flex: 1;">🖨️ Print Receipt</button>
+        <button class="btn btn-secondary" id="closeReceiptBtn" style="flex: 1;">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container footer-bottom">
+      <p>&copy; 2026 DentAssist. Built for Dental Education.</p>
+      <p>Precision Clinical Guide</p>
+    </div>
+  </footer>
 
   <script src="js/script.js"></script>
   <script src="js/appointment.js"></script>
